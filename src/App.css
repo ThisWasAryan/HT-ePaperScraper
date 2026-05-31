@@ -57,15 +57,15 @@
   flex-direction: column;
 }
 
-/* Selector Bar */
+/* Selector Bar - Integrated with Header styling */
 .selector-bar {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
-  padding: 1.5rem 2rem;
+  gap: 1.5rem;
+  padding: 1rem 2rem;
   background-color: var(--surface-color);
   border-bottom: 1px solid var(--border-color);
-  align-items: flex-end;
+  align-items: center;
 }
 
 .input-group {
@@ -99,19 +99,21 @@
 
 .btn-primary {
   padding: 0.75rem 1.5rem;
-  border-radius: var(--border-radius-md);
+  border-radius: var(--border-radius-sm);
   background-color: var(--accent-color);
-  color: #ffffff;
-  font-weight: 600;
-  font-size: 1rem;
-  transition: background-color var(--transition-speed);
+  color: var(--bg-color);
+  font-weight: 500;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: opacity var(--transition-speed);
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background-color: var(--accent-hover);
+  opacity: 0.8;
 }
 
 .btn-primary:disabled {
@@ -145,19 +147,17 @@
 
 /* Page Card */
 .page-card {
-  background-color: var(--surface-color);
-  border-radius: var(--border-radius-lg);
-  border: 1px solid var(--border-color);
-  overflow: hidden;
-  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
   display: flex;
   flex-direction: column;
+  transition: opacity var(--transition-speed);
+  border: 1px solid var(--border-color);
+  background-color: var(--surface-color);
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
 }
 
 .page-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--accent-light);
+  border-color: var(--text-secondary);
 }
 
 .card-image-container {
@@ -172,11 +172,11 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  transition: transform var(--transition-speed);
+  transition: transform 0.4s ease;
 }
 
 .page-card:hover .card-image {
-  transform: scale(1.02);
+  transform: scale(1.03);
 }
 
 .card-footer {
@@ -388,11 +388,87 @@
   to { transform: rotate(360deg); }
 }
 
+/* Landing Experience */
+.landing-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.landing-hero {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.landing-title {
+  font-size: 2.75rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.landing-subtitle {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.landing-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.feature-card {
+  padding: 1.5rem;
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  text-align: left;
+}
+
+.feature-icon {
+  color: var(--accent-color);
+  margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.feature-card p {
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.landing-footer {
+  text-align: center;
+  color: var(--text-secondary);
+  font-style: italic;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 @media (max-width: 768px) {
   .header, .selector-bar {
     flex-direction: column;
     align-items: stretch;
     gap: 1rem;
+  }
+  
+  .landing-title {
+    font-size: 2.5rem;
   }
   
   .header-actions {
@@ -407,4 +483,29 @@
   .reader-next { right: 0.5rem; }
   
   .reader-content { padding: 0.5rem; }
+}
+
+/* Footer */
+.app-footer {
+  text-align: center;
+  padding: 1rem;
+  border-top: 1px solid var(--border-color);
+  background-color: var(--surface-color);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 10;
+}
+
+.app-footer a {
+  color: var(--accent-color);
+  text-decoration: none;
+  transition: opacity var(--transition-speed);
+}
+
+.app-footer a:hover {
+  opacity: 0.8;
+  text-decoration: underline;
 }

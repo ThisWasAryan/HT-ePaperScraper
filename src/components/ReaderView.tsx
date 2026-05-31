@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { ChevronLeft, ChevronRight, X, ZoomIn, ZoomOut, Download, Maximize } from 'lucide-react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { ChevronLeft, ChevronRight, X, ZoomIn, ZoomOut, Download, Maximize, RotateCcw } from 'lucide-react';
+import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import type { PageInfo } from '../services/epaperService';
 
 interface ReaderViewProps {
@@ -14,15 +15,15 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ pages, initialPageNumber
     return index >= 0 ? index : 0;
   });
   
-  const [isZoomed, setIsZoomed] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const isDragging = useRef(false);
 
   const currentPage = pages[currentIndex];
 
   const handlePrev = useCallback(() => {
     if (currentIndex > 0) {
       setCurrentIndex((prev) => prev - 1);
-      setIsZoomed(false);
       setImageLoaded(false);
     }
   }, [currentIndex]);
@@ -30,7 +31,6 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ pages, initialPageNumber
   const handleNext = useCallback(() => {
     if (currentIndex < pages.length - 1) {
       setCurrentIndex((prev) => prev + 1);
-      setIsZoomed(false);
       setImageLoaded(false);
     }
   }, [currentIndex, pages.length]);
@@ -46,17 +46,29 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ pages, initialPageNumber
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handlePrev, handleNext, onClose]);
 
-  const toggleZoom = () => setIsZoomed(!isZoomed);
-
-  const handleDownload = () => {
-    const a = document.createElement('a');
-    a.href = currentPage.fullResUrl;
-    a.download = `Page_${currentPage.pageNumber}.jpg`;
-    a.target = '_blank';
-    a.rel = 'noopener noreferrer';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+  const handleDownload = async () => {
+    if (isDownloading) return;
+    
+    try {
+      setIsDownloading(true);
+      const response = await fetch(currentPage.fullResUrl);
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = `HT_Archive_Page_${currentPage.pageNumber}.jpg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+    } catch (error) {
+      console.error('Download failed', error);
+      window.open(currentPage.fullResUrl, '_blank');
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   const toggleFullscreen = () => {
@@ -80,27 +92,30 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ pages, initialPageNumber
             <span>Close</span>
           </button>
           <div className="reader-page-info">
-            <span className="reader-page-number">Page {currentPage.pageNumber} of {pages[pages.length - 1].pageNumber}</span>
+            <span className="reader-page-number serif">Page {currentPage.pageNumber} of {pages[pages.length - 1].pageNumber}</span>
             <span className="reader-page-title">{currentPage.title}</span>
           </div>
         </div>
 
         <div className="reader-controls">
-          <button className="btn-icon" onClick={toggleZoom} title={isZoomed ? "Zoom Out" : "Zoom In"}>
-            {isZoomed ? <ZoomOut size={20} /> : <ZoomIn size={20} />}
-          </button>
           <button className="btn-icon" onClick={toggleFullscreen} title="Toggle Fullscreen">
             <Maximize size={20} />
           </button>
-          <button className="btn-icon" onClick={handleDownload} title="Download Full Resolution">
+          <button 
+            className="btn-icon" 
+            onClick={handleDownload} 
+            title="Download Full Resolution"
+            disabled={isDownloading}
+            style={{ opacity: isDownloading ? 0.5 : 1 }}
+          >
             <Download size={20} />
           </button>
         </div>
       </div>
 
-      <div className="reader-content" onClick={() => isZoomed && toggleZoom()}>
+      <div className="reader-content">
         {!imageLoaded && (
-          <div className="spinner" style={{ position: 'absolute', color: 'var(--accent-color)' }}>
+          <div className="spinner" style={{ position: 'absolute', color: 'var(--text-secondary)' }}>
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="12" y1="2" x2="12" y2="6"></line>
               <line x1="12" y1="18" x2="12" y2="22"></line>
@@ -113,25 +128,78 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ pages, initialPageNumber
             </svg>
           </div>
         )}
-        <img
-          src={currentPage.fullResUrl}
-          alt={`Page ${currentPage.pageNumber}`}
-          className={`reader-image ${isZoomed ? 'zoomed' : ''}`}
-          onLoad={() => setImageLoaded(true)}
-          style={{ opacity: imageLoaded ? 1 : 0 }}
-          onClick={(e) => {
-            if (!isZoomed) {
+        
+        <TransformWrapper
+          initialScale={1}
+          minScale={0.5}
+          maxScale={5}
+          centerOnInit={true}
+          wheel={{ step: 0.1 }}
+          doubleClick={{ step: 3, mode: 'zoomIn' }}
+          panning={{ velocityDisabled: false }}
+        >
+          {({ zoomIn, zoomOut, resetTransform, setTransform, state }) => {
+            const handleImageClick = (e: React.MouseEvent<HTMLImageElement>) => {
+              if (isDragging.current) return;
               e.stopPropagation();
-              toggleZoom();
-            }
-          }}
-        />
+              const { scale, positionX, positionY } = state;
+              
+              // Target step for single click
+              const step = 1.5;
+              const newScale = Math.min(scale * step, 5);
+              if (newScale === scale) return;
+          
+              const wrapper = e.currentTarget.parentElement;
+              if (!wrapper) return;
+              const rect = wrapper.getBoundingClientRect();
+              
+              const cursorX = e.clientX - rect.left;
+              const cursorY = e.clientY - rect.top;
+          
+              const newPosX = cursorX - (cursorX - positionX) * (newScale / scale);
+              const newPosY = cursorY - (cursorY - positionY) * (newScale / scale);
+          
+              setTransform(newPosX, newPosY, newScale, 300, "easeOutQuad");
+            };
+
+            return (
+            <>
+              {/* Overlay zoom controls */}
+              <div style={{ position: 'absolute', bottom: '2rem', display: 'flex', gap: '0.5rem', background: 'var(--surface-color)', padding: '0.5rem', borderRadius: 'var(--border-radius-lg)', boxShadow: 'var(--shadow-lg)', zIndex: 10 }}>
+                <button className="btn-icon" onClick={() => zoomOut()} title="Zoom Out"><ZoomOut size={20} /></button>
+                <button className="btn-icon" onClick={() => resetTransform()} title="Reset Zoom"><RotateCcw size={20} /></button>
+                <button className="btn-icon" onClick={() => zoomIn()} title="Zoom In"><ZoomIn size={20} /></button>
+              </div>
+
+              <TransformComponent wrapperStyle={{ width: '100%', height: '100%' }}>
+                <img
+                  src={currentPage.fullResUrl}
+                  alt={`Page ${currentPage.pageNumber}`}
+                  onLoad={() => setImageLoaded(true)}
+                  onClick={handleImageClick}
+                  onPointerDown={() => { isDragging.current = false; }}
+                  onPointerMove={() => { isDragging.current = true; }}
+                  style={{ 
+                    opacity: imageLoaded ? 1 : 0, 
+                    transition: 'opacity 0.3s ease',
+                    maxWidth: '100vw', 
+                    maxHeight: '100vh', 
+                    objectFit: 'contain',
+                    cursor: state.scale > 1 ? 'grab' : 'zoom-in'
+                  }}
+                  draggable="false"
+                />
+              </TransformComponent>
+            </>
+          )}}
+        </TransformWrapper>
 
         <button 
           className="reader-nav reader-prev" 
           onClick={(e) => { e.stopPropagation(); handlePrev(); }}
           disabled={currentIndex === 0}
           aria-label="Previous Page"
+          style={{ zIndex: 11 }}
         >
           <ChevronLeft size={32} />
         </button>
@@ -141,6 +209,7 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ pages, initialPageNumber
           onClick={(e) => { e.stopPropagation(); handleNext(); }}
           disabled={currentIndex === pages.length - 1}
           aria-label="Next Page"
+          style={{ zIndex: 11 }}
         >
           <ChevronRight size={32} />
         </button>

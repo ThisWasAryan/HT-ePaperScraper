@@ -13,7 +13,7 @@ export const GalleryView: React.FC<GalleryViewProps> = ({ pages, onOpenReader })
   return (
     <div className="gallery-container">
       <div className="gallery-header">
-        <h2 className="gallery-title">Edition Pages</h2>
+        <h2 className="gallery-title serif">Edition Pages</h2>
         <span style={{ color: 'var(--text-secondary)' }}>
           {pages.length} pages found
         </span>

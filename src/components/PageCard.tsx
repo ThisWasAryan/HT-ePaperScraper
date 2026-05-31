@@ -9,18 +9,33 @@ interface PageCardProps {
 
 export const PageCard: React.FC<PageCardProps> = ({ page, onOpenReader }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
-  const handleDownload = (e: React.MouseEvent) => {
+  const handleDownload = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    // Use an anchor tag to trigger download directly
-    const a = document.createElement('a');
-    a.href = page.fullResUrl;
-    a.download = `Page_${page.pageNumber}.jpg`;
-    a.target = '_blank';
-    a.rel = 'noopener noreferrer';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    if (isDownloading) return;
+    
+    try {
+      setIsDownloading(true);
+      const response = await fetch(page.fullResUrl);
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = `HT_Archive_Page_${page.pageNumber}.jpg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+    } catch (error) {
+      console.error('Download failed', error);
+      // Fallback
+      window.open(page.fullResUrl, '_blank');
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   return (
@@ -37,7 +52,7 @@ export const PageCard: React.FC<PageCardProps> = ({ page, onOpenReader }) => {
       </div>
       <div className="card-footer">
         <div className="card-info">
-          <span className="card-page-num">Page {page.pageNumber}</span>
+          <span className="card-page-num serif">Page {page.pageNumber}</span>
           <span className="card-title">{page.title}</span>
         </div>
         <div className="card-actions">
@@ -52,6 +67,8 @@ export const PageCard: React.FC<PageCardProps> = ({ page, onOpenReader }) => {
             className="btn-icon" 
             onClick={handleDownload}
             title="Download Full Resolution"
+            disabled={isDownloading}
+            style={{ opacity: isDownloading ? 0.5 : 1 }}
           >
             <Download size={20} />
           </button>
