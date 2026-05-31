@@ -4,6 +4,8 @@ A beautiful, premium, open-source static web application for browsing, reading, 
 
 Built with React, TypeScript, and Vite, this project completely bypasses the ads, sign-in walls, and tracking metrics present on the official website by directly hooking into their unauthenticated backend JSON APIs.
 
+[A Demonstration/Tutorial Video](https://youtu.be/PvuIr3bYZrU) *last updated on 01/06/2026*
+
 ## Features
 
 - **Professional Document Viewer:** An immersive, distraction-free reading experience powered by a custom pan-and-zoom engine. Single-click to zoom exactly at your cursor, double-click for larger steps, and smoothly pan across high-resolution pages.
