@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState } from 'react';
 import { format } from 'date-fns';
 import { Search, Edit2 } from 'lucide-react';
 import { cities, type CityConfig } from '../config/cities';
