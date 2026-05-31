@@ -7,9 +7,9 @@ export const Header: React.FC = () => {
 
   return (
     <header className="header">
-      <div className="brand">
-        <BookOpen className="brand-icon" size={28} />
-        <span>HT ePaper ScraperLOL</span>
+      <div className="brand serif">
+        <BookOpen className="brand-icon" size={24} />
+        <span>HT-ePaperScraper</span>
       </div>
       <div className="header-actions">
         <button 

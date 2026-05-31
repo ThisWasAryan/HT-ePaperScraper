@@ -6,6 +6,7 @@ import { Header } from './components/Header';
 import { Selector } from './components/Selector';
 import { GalleryView } from './components/GalleryView';
 import { ReaderView } from './components/ReaderView';
+import { LandingExperience } from './components/LandingExperience';
 import { fetchEdition } from './services/epaperService';
 import type { PageInfo } from './services/epaperService';
 import { cities } from './config/cities';
@@ -50,7 +51,7 @@ function App() {
       <main className="main-content">
         {isLoading && (
           <div className="status-container">
-            <div className="spinner status-icon" style={{ color: 'var(--accent-color)' }}>
+            <div className="spinner status-icon" style={{ color: 'var(--text-secondary)' }}>
               <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="12" y1="2" x2="12" y2="6"></line>
                 <line x1="12" y1="18" x2="12" y2="22"></line>
@@ -62,25 +63,21 @@ function App() {
                 <line x1="16.24" y1="4.93" x2="19.07" y2="7.76"></line>
               </svg>
             </div>
-            <h2 className="status-title">Discovering Edition...</h2>
-            <p>Fetching and extracting pages from the Hindustan Times ePaper.</p>
+            <h2 className="status-title serif">Discovering Edition</h2>
+            <p>Fetching and extracting pages from the archive.</p>
           </div>
         )}
 
         {!isLoading && error && (
           <div className="status-container">
             <AlertCircle size={48} className="status-icon" style={{ color: '#ef4444' }} />
-            <h2 className="status-title">Edition Not Available</h2>
+            <h2 className="status-title serif">Edition Not Available</h2>
             <p>{error}</p>
           </div>
         )}
 
         {!isLoading && !error && pages.length === 0 && (
-          <div className="status-container">
-            <Newspaper size={48} className="status-icon" />
-            <h2 className="status-title">Welcome to HT ePaper ScraperLOL</h2>
-            <p>Select a city and date to load an edition.</p>
-          </div>
+          <LandingExperience />
         )}
 
         {!isLoading && !error && pages.length > 0 && (
@@ -95,6 +92,13 @@ function App() {
           />
         )}
       </main>
+
+      <footer className="app-footer">
+        <p>Made with ♥ by Aryan Raj</p>
+        <a href="https://github.com/ThisWasAryan/HT-ePaperScraper?utm_source=chatgpt.com" target="_blank" rel="noopener noreferrer">
+          GitHub Repository
+        </a>
+      </footer>
     </div>
   );
 }

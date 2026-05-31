@@ -1,18 +1,20 @@
-# HT ePaper ScraperLOL
+# HT-ePaperScraper
 
 A beautiful, premium, open-source static web application for browsing, reading, and downloading Hindustan Times ePaper editions.
 
 ## Features
 
-- **Edition Discovery:** Browse daily ePaper editions by selecting a supported city and publication date.
-- **Premium Gallery:** A responsive, dark-mode-first gallery grid that pre-loads high-quality page thumbnails.
-- **Immersive Reader:** A full-screen distraction-free reading experience with Zoom, Fullscreen, and rapid background page pre-fetching.
-- **Individual Page Downloads:** Download high-resolution JPGs of any page directly to your device.
-- **Static & Fast:** Pure static frontend React application (Vite + React + TypeScript), designed perfectly for GitHub Pages deployment.
+- **Professional Document Viewer:** An immersive, distraction-free reading experience powered by a custom pan-and-zoom engine. Single-click to zoom exactly at your cursor, double-click for larger steps, and smoothly pan across high-resolution pages.
+- **True Original Quality:** View the exact high-resolution layouts straight from the publisher's digital press.
+- **Historical Access:** Browse past publications and access older editions securely from the archive by selecting supported cities and publication dates.
+- **Instant Background Loading:** Aggressive background pre-fetching ensures pages flip instantly as you read.
+- **True File Downloading:** Safely download high-resolution JPGs of any page directly to your local device.
+- **Premium Editorial Design:** A highly polished, responsive interface built with pristine serif typography and a carefully restrained color palette (featuring both Light and Dark modes).
+- **Static & Fast:** A pure static frontend application built with React, Vite, and TypeScript. No backend required—designed perfectly for static hosting like GitHub Pages.
 
-## How it works
+## How It Works
 
-The application functions by directly scraping the Hindustan Times ePaper public URLs. It seamlessly validates the edition date and city code, extracting the page images and reading metadata to organize the newspaper in its exact printed order. It completely bypasses all the clunky ads, sign-in popups, and tracking metrics present on the official website, giving you the pure newspaper.
+The application operates by programmatically analyzing the public Hindustan Times ePaper structure. By validating the edition date and city code, it dynamically aggregates high-resolution page assets and reading metadata. This structures the newspaper in its exact printed order, completely bypassing the ads, sign-in walls, and heavy tracking metrics present on the official website.
 
 ## Setup & Local Development
 
@@ -20,8 +22,8 @@ This project requires Node.js and NPM.
 
 1. Clone the repository:
    ```bash
-   git clone <repo-url>
-   cd EPaperScraping
+   git clone https://github.com/ThisWasAryan/HT-ePaperScraper.git
+   cd HT-ePaperScraper
    ```
 
 2. Install dependencies:
@@ -36,15 +38,18 @@ This project requires Node.js and NPM.
 
 ## Production Build
 
-To build the static files for production (e.g., GitHub Pages):
+To build the static optimized files for production:
 
 ```bash
 npm run build
 ```
-The optimized files will be located in the `dist` directory.
+The compiled files will be located in the `dist` directory, ready to be deployed to any static host.
 
 ## Contributing
 
-Feel free to open a Pull Request to add more supported cities or improve the reader functionality. 
+Feel free to open a Pull Request to add more supported cities, refine the design system, or improve the reading engine.
 
-*Note: PDF generation is planned for MVP v2 using a backend proxy service, as client-side PDF generation is limited by browser security rules.*
+*Note: PDF generation (bundling all pages into a single document) is planned for a future release using a backend proxy service, as client-side PDF generation is strictly limited by browser CORS security rules.*
+
+---
+Made with ♥ by Aryan Raj
