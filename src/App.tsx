@@ -128,7 +128,7 @@ function App() {
 
       <footer className="app-footer">
         <p>Made with ♥ by Aryan Raj</p>
-        <a href="https://github.com/ThisWasAryan/HT-ePaperScraper?utm_source=chatgpt.com" target="_blank" rel="noopener noreferrer">
+        <a href="https://github.com/ThisWasAryan/HT-ePaperScraper" target="_blank" rel="noopener noreferrer">
           GitHub Repository
         </a>
       </footer>
