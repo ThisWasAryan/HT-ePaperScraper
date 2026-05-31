@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AlertCircle } from 'lucide-react';
 import './App.css';
 
@@ -17,8 +17,39 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [pages, setPages] = useState<PageInfo[]>([]);
   const [error, setError] = useState<string | null>(null);
-  
   const [readerPage, setReaderPage] = useState<number | null>(null);
+
+  // Scroll direction detection for mobile sticky header
+  const [isHeaderHidden, setIsHeaderHidden] = useState(false);
+  
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    const updateScrollDir = () => {
+      const scrollY = window.scrollY;
+      
+      // Only hide if we've scrolled down a bit (not at the very top)
+      if (Math.abs(scrollY - lastScrollY) < 10) {
+        ticking = false;
+        return;
+      }
+      
+      setIsHeaderHidden(scrollY > lastScrollY && scrollY > 100);
+      lastScrollY = scrollY > 0 ? scrollY : 0;
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateScrollDir);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const handleSearch = async () => {
     setIsLoading(true);
@@ -38,15 +69,17 @@ function App() {
 
   return (
     <div className="app-container">
-      <Header />
-      <Selector 
-        selectedCity={selectedCity}
-        onCityChange={setSelectedCity}
-        selectedDate={selectedDate}
-        onDateChange={setSelectedDate}
-        onSearch={handleSearch}
-        isLoading={isLoading}
-      />
+      <div className={`top-nav-container ${isHeaderHidden ? 'hidden' : ''}`}>
+        <Header />
+        <Selector 
+          selectedCity={selectedCity}
+          onCityChange={setSelectedCity}
+          selectedDate={selectedDate}
+          onDateChange={setSelectedDate}
+          onSearch={handleSearch}
+          isLoading={isLoading}
+        />
+      </div>
 
       <main className="main-content">
         {isLoading && (

@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { format } from 'date-fns';
-import { Search } from 'lucide-react';
+import { Search, Edit2 } from 'lucide-react';
 import { cities, type CityConfig } from '../config/cities';
 
 interface SelectorProps {
@@ -20,6 +20,8 @@ export const Selector: React.FC<SelectorProps> = ({
   onSearch,
   isLoading
 }) => {
+  const [isExpanded, setIsExpanded] = useState(true);
+
   // Group cities by base region
   const groupedCities = useMemo(() => {
     const groups = new Map<string, CityConfig[]>();
@@ -71,7 +73,29 @@ export const Selector: React.FC<SelectorProps> = ({
     }
   };
 
+  const handleSearch = () => {
+    if (window.innerWidth <= 768) {
+      setIsExpanded(false);
+    }
+    onSearch();
+  };
+
   const currentEditions = groupedCities.get(currentRegion) || [];
+  const selectedCityName = currentEditions.find(c => c.slug === selectedCity)?.displayName || 'Unknown Edition';
+
+  if (!isExpanded) {
+    return (
+      <div className="selector-bar compact-selector">
+        <div className="compact-info">
+          <span className="compact-title serif">{selectedCityName}</span>
+          <span className="compact-date">{format(selectedDate, 'MMMM d, yyyy')}</span>
+        </div>
+        <button className="btn-icon" onClick={() => setIsExpanded(true)} title="Edit Selection">
+          <Edit2 size={20} />
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="selector-bar">
@@ -128,7 +152,7 @@ export const Selector: React.FC<SelectorProps> = ({
 
       <button 
         className="btn-primary" 
-        onClick={onSearch} 
+        onClick={handleSearch} 
         disabled={isLoading}
       >
         <Search size={20} />
