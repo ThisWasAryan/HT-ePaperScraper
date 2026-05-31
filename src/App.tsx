@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Newspaper, AlertCircle } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import './App.css';
 
 import { Header } from './components/Header';
