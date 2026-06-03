@@ -17,6 +17,15 @@ Built with React, TypeScript, and Vite, this project completely bypasses the ads
 - **Static & Fast:** A pure static frontend application. No backend required—designed perfectly for static hosting like GitHub Pages.
 
 ---
+<img width="1920" height="1080" alt="DemoHT1" src="https://github.com/user-attachments/assets/e28f0628-d367-4881-bf81-6fdcd6f6a748" />
+
+*Web viewer interface showing access to all available cities and editions, demonstrating the platform's complete newspaper navigation capabilities.*
+
+<img width="1920" height="1080" alt="DemoHT2" src="https://github.com/user-attachments/assets/f8bf1844-0f27-4d0c-830d-3b426c74cd89" />
+
+*Individual page viewer with high resolution image rendering and zoom capability, allowing users to view or download the highest quality page available.*
+
+---
 
 ## How It Works
 
