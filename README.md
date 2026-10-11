@@ -1,10 +1,10 @@
 # HT-ePaperScraper
 
-> **Live Deployment:** [https://ht-epaperscraper.vercel.app/](https://ht-epaperscraper.vercel.app/)
-
 A beautiful, premium, open-source web application for browsing, reading, and downloading Hindustan Times ePaper editions.
 
 Built with React, TypeScript, and Vite, this project bypasses ads, paywalls, and tracking metrics by routing requests through a lightweight edge proxy server directly to Hindustan Times' unauthenticated internal Next.js backend JSON APIs.
+
+> **Sister Project:** Following this project's development, we extended our security research to Dainik Jagran's ePaper platform, uncovering and leveraging a distinct security vulnerability. The resulting project shares this repository's interface and is available here: [Jagran ePaper Scraping](https://github.com/ThisWasAryan/Jagran-ePaperScraping).
 
 [A Demonstration/Tutorial Video](https://youtu.be/PvuIr3bYZrU) *last updated on 01/06/2026*
 
@@ -18,6 +18,9 @@ Built with React, TypeScript, and Vite, this project bypasses ads, paywalls, and
 - **True File Downloading:** Safely download high-resolution images of any page directly to your local device with clean, numbered filenames.
 - **Premium Editorial Design:** A highly polished, responsive interface built with pristine serif typography and a carefully restrained color palette (featuring both Light and Dark modes).
 - **Server/Proxy Architecture:** Utilizes edge proxy rewrites on Vercel and a local development proxy server with IPv4 fallback to guarantee 100% reliable, zero-CORS communication with the upstream API.
+
+
+> **Live Deployment:** [https://ht-epaperscraper.vercel.app/](https://ht-epaperscraper.vercel.app/)
 
 ---
 <img width="1920" height="1080" alt="DemoHT1" src="https://github.com/user-attachments/assets/e28f0628-d367-4881-bf81-6fdcd6f6a748" />
@@ -93,14 +96,6 @@ To solve this, a proxy server is now used:
 3. **First-Class High-Res WebP:** Mapped native `HrImageUrl` and `HighResolution` WebP assets directly from the payload, bypassing the need for lossy image conversions.
 4. **Expanded Edition Directory:** Updated the catalog to **72 editions** with authentic region and edition codes.
 5. **Proactive Edition Availability:** Added parallel scanning and caching so only editions containing published pages on the selected date appear in the dropdown.
-
----
-
-## Live Deployment
-
-The application is deployed and live on Vercel:
-
-👉 **[https://ht-epaperscraper.vercel.app/](https://ht-epaperscraper.vercel.app/)**
 
 ---
 
