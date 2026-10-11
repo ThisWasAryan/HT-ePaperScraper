@@ -57,7 +57,8 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ pages, initialPageNumber
       
       const a = document.createElement('a');
       a.href = blobUrl;
-      a.download = `HT_Archive_Page_${currentPage.pageNumber}.jpg`;
+      const extension = currentPage.fullResUrl.includes('.webp') ? 'webp' : 'jpg';
+      a.download = `HT_Archive_Page_${currentPage.pageNumber}.${extension}`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);

@@ -23,7 +23,8 @@ export const PageCard: React.FC<PageCardProps> = ({ page, onOpenReader }) => {
       
       const a = document.createElement('a');
       a.href = blobUrl;
-      a.download = `HT_Archive_Page_${page.pageNumber}.jpg`;
+      const extension = page.fullResUrl.includes('.webp') ? 'webp' : 'jpg';
+      a.download = `HT_Archive_Page_${page.pageNumber}.${extension}`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -43,9 +44,11 @@ export const PageCard: React.FC<PageCardProps> = ({ page, onOpenReader }) => {
       <div className="card-image-container" onClick={() => onOpenReader(page.pageNumber)}>
         {!imageLoaded && <div className="skeleton" style={{ width: '100%', height: '100%', position: 'absolute' }} />}
         <img
-          src={page.fullResUrl}
+          src={page.thumbnailUrl || page.fullResUrl}
           alt={`Page ${page.pageNumber}`}
           className="card-image"
+          loading="lazy"
+          decoding="async"
           onLoad={() => setImageLoaded(true)}
           style={{ opacity: imageLoaded ? 1 : 0 }}
         />

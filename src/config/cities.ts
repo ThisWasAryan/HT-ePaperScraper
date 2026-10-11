@@ -1,250 +1,442 @@
 export interface CityConfig {
   displayName: string;
   slug: string;
-  cityCode: string;
-  editionId: number;
+  region: string;
+  editionCode: string;
 }
 
 export const cities: CityConfig[] = [
   {
     "displayName": "Delhi",
     "slug": "delhi",
-    "cityCode": "HT_DELH",
-    "editionId": 1
+    "region": "Delhi",
+    "editionCode": "HT_DELH"
   },
   {
     "displayName": "Amritsar",
     "slug": "amritsar",
-    "cityCode": "HT_AMRI",
-    "editionId": 2
+    "region": "Amritsar",
+    "editionCode": "HT_AMRI"
   },
   {
     "displayName": "Amritsar City",
     "slug": "amritsar-city",
-    "cityCode": "HT_AMRI",
-    "editionId": 3
+    "region": "Amritsar",
+    "editionCode": "HTC_AMRI"
   },
   {
     "displayName": "Malwa City",
     "slug": "malwa-city",
-    "cityCode": "HT_MALW",
-    "editionId": 5
+    "region": "Punjab",
+    "editionCode": "HTC_BATH"
+  },
+  {
+    "displayName": "Brunch Chandigarh",
+    "slug": "brunch-chandigarh",
+    "region": "Chandigarh",
+    "editionCode": "HTB_CHAN"
   },
   {
     "displayName": "Chandigarh",
     "slug": "chandigarh",
-    "cityCode": "HT_CHAN",
-    "editionId": 8
+    "region": "Chandigarh",
+    "editionCode": "HT_CHAN"
   },
   {
     "displayName": "Chandigarh City",
     "slug": "chandigarh-city",
-    "cityCode": "HT_CHAN",
-    "editionId": 9
+    "region": "Chandigarh",
+    "editionCode": "HTC_CHAN"
   },
   {
     "displayName": "Chandigarh Live",
     "slug": "chandigarh-live",
-    "cityCode": "HT_CHAN",
-    "editionId": 10
+    "region": "Chandigarh",
+    "editionCode": "HT_CHPU"
+  },
+  {
+    "displayName": "Brunch Delhi",
+    "slug": "brunch-delhi",
+    "region": "Delhi",
+    "editionCode": "HTB_DELH"
+  },
+  {
+    "displayName": "School Delhi",
+    "slug": "school-delhi",
+    "region": "School Delhi",
+    "editionCode": "HTN_DELH"
   },
   {
     "displayName": "South Delhi City",
     "slug": "south-delhi-city",
-    "cityCode": "HT_SOUT",
-    "editionId": 15
+    "region": "Delhi",
+    "editionCode": "HTC_DELS"
   },
   {
     "displayName": "West Delhi City",
     "slug": "west-delhi-city",
-    "cityCode": "HT_WEST",
-    "editionId": 16
+    "region": "Delhi",
+    "editionCode": "HTC_DELW"
   },
   {
     "displayName": "Gurgaon",
     "slug": "gurgaon",
-    "cityCode": "HT_GURG",
-    "editionId": 18
+    "region": "Gurgaon",
+    "editionCode": "HT_GURG"
   },
   {
     "displayName": "Gurugram City",
     "slug": "gurugram-city",
-    "cityCode": "HT_GURU",
-    "editionId": 19
+    "region": "Gurgaon",
+    "editionCode": "HTC_GURG"
   },
   {
     "displayName": "Noida",
     "slug": "noida",
-    "cityCode": "HT_NOID",
-    "editionId": 21
+    "region": "Noida",
+    "editionCode": "HT_NOID"
   },
   {
     "displayName": "Delhi City",
     "slug": "delhi-city",
-    "cityCode": "HT_DELH",
-    "editionId": 23
+    "region": "Delhi",
+    "editionCode": "HTC_DELH"
   },
   {
     "displayName": "East Delhi City",
     "slug": "east-delhi-city",
-    "cityCode": "HT_EAST",
-    "editionId": 24
+    "region": "Delhi",
+    "editionCode": "HTC_DELE"
   },
   {
-    "displayName": "Edge (Youth)",
-    "slug": "edge-youth",
-    "cityCode": "HT_EDGE",
-    "editionId": 26
+    "displayName": "North Delhi City",
+    "slug": "north-delhi-city",
+    "region": "Delhi",
+    "editionCode": "HTC_DELN"
   },
   {
     "displayName": "Haryana",
     "slug": "haryana",
-    "cityCode": "HT_HARY",
-    "editionId": 27
+    "region": "Haryana",
+    "editionCode": "HT_HARY"
   },
   {
-    "displayName": "Punjab",
-    "slug": "punjab",
-    "cityCode": "HT_PUNJ",
-    "editionId": 31
+    "displayName": "Jalandhar",
+    "slug": "jalandhar",
+    "region": "Punjab",
+    "editionCode": "HT_JALA"
   },
   {
     "displayName": "Jalandhar City",
     "slug": "jalandhar-city",
-    "cityCode": "HT_JALA",
-    "editionId": 32
+    "region": "Punjab",
+    "editionCode": "HTC_JALA"
   },
   {
     "displayName": "Jammu",
     "slug": "jammu",
-    "cityCode": "HT_JAMM",
-    "editionId": 33
+    "region": "Jammu",
+    "editionCode": "HT_JAMM"
   },
   {
     "displayName": "Lucknow",
     "slug": "lucknow",
-    "cityCode": "HT_LUCK",
-    "editionId": 34
+    "region": "Lucknow",
+    "editionCode": "HT_LUCK"
   },
   {
     "displayName": "Lucknow City",
     "slug": "lucknow-city",
-    "cityCode": "HT_LUCK",
-    "editionId": 35
+    "region": "Lucknow",
+    "editionCode": "HTC_LUCK"
   },
   {
     "displayName": "Ludhiana Live",
     "slug": "ludhiana-live",
-    "cityCode": "HT_LUDH",
-    "editionId": 36
+    "region": "Ludhiana",
+    "editionCode": "HT_LUPU"
   },
   {
     "displayName": "Ludhiana",
     "slug": "ludhiana",
-    "cityCode": "HT_LUDH",
-    "editionId": 37
+    "region": "Ludhiana",
+    "editionCode": "HT_LUDH"
   },
   {
     "displayName": "Ludhiana City",
     "slug": "ludhiana-city",
-    "cityCode": "HT_LUDH",
-    "editionId": 38
+    "region": "Ludhiana",
+    "editionCode": "HTC_LUDH"
   },
   {
-    "displayName": "Mumbai City",
-    "slug": "mumbai-city",
-    "cityCode": "HT_MUMB",
-    "editionId": 42
+    "displayName": "Brunch Mumbai",
+    "slug": "brunch-mumbai",
+    "region": "Mumbai",
+    "editionCode": "HTB_MUMB"
+  },
+  {
+    "displayName": "School Mumbai",
+    "slug": "school-mumbai",
+    "region": "School Mumbai",
+    "editionCode": "HTN_MUMB"
+  },
+  {
+    "displayName": "Powai Mumbai City",
+    "slug": "powai-mumbai-city",
+    "region": "Mumbai",
+    "editionCode": "HTC_POWA"
+  },
+  {
+    "displayName": "South Mumbai Caf\u00e9",
+    "slug": "south-mumbai-cafe",
+    "region": "Mumbai",
+    "editionCode": "HTC_MUMS"
+  },
+  {
+    "displayName": "West Mumbai City",
+    "slug": "west-mumbai-city",
+    "region": "Mumbai",
+    "editionCode": "HTC_MUMW"
+  },
+  {
+    "displayName": "Thane",
+    "slug": "thane",
+    "region": "Thane",
+    "editionCode": "HT_THAN"
   },
   {
     "displayName": "Mumbai",
     "slug": "mumbai",
-    "cityCode": "HT_MUMB",
-    "editionId": 45
+    "region": "Mumbai",
+    "editionCode": "HT_MUMB"
+  },
+  {
+    "displayName": "Mumbai City",
+    "slug": "mumbai-city",
+    "region": "Mumbai",
+    "editionCode": "HTC_MUMB"
+  },
+  {
+    "displayName": "Navi Mumbai",
+    "slug": "navi-mumbai",
+    "region": "Navi Mumbai",
+    "editionCode": "HT_MUMN"
+  },
+  {
+    "displayName": "Patiala",
+    "slug": "patiala",
+    "region": "Punjab",
+    "editionCode": "HT_PATI"
   },
   {
     "displayName": "Patiala Live",
     "slug": "patiala-live",
-    "cityCode": "HT_PATI",
-    "editionId": 50
+    "region": "Punjab",
+    "editionCode": "HT_PAPU"
   },
   {
     "displayName": "Patna",
     "slug": "patna",
-    "cityCode": "HT_PATN",
-    "editionId": 51
+    "region": "Patna",
+    "editionCode": "HT_PATM"
   },
   {
     "displayName": "Patna City",
     "slug": "patna-city",
-    "cityCode": "HT_PATN",
-    "editionId": 52
+    "region": "Patna",
+    "editionCode": "HTC_PATN"
   },
   {
     "displayName": "Pune City",
     "slug": "pune-city",
-    "cityCode": "HT_PUNE",
-    "editionId": 53
+    "region": "Pune",
+    "editionCode": "HTC_PUNE"
   },
   {
     "displayName": "Pune",
     "slug": "pune",
-    "cityCode": "HT_PUNE",
-    "editionId": 54
+    "region": "Pune",
+    "editionCode": "HT_PUNE"
+  },
+  {
+    "displayName": "Punjab",
+    "slug": "punjab",
+    "region": "Punjab",
+    "editionCode": "HT_PUNJ"
   },
   {
     "displayName": "Rajasthan City",
     "slug": "rajasthan-city",
-    "cityCode": "HT_RAJA",
-    "editionId": 56
+    "region": "Rajasthan",
+    "editionCode": "HTC_RAJA"
   },
   {
     "displayName": "Rajasthan",
     "slug": "rajasthan",
-    "cityCode": "HT_RAJA",
-    "editionId": 57
+    "region": "Rajasthan",
+    "editionCode": "HT_RAJA"
   },
   {
     "displayName": "Ranchi",
     "slug": "ranchi",
-    "cityCode": "HT_RANC",
-    "editionId": 58
+    "region": "Ranchi",
+    "editionCode": "HT_RANC"
   },
   {
     "displayName": "Ranchi City",
     "slug": "ranchi-city",
-    "cityCode": "HT_RANC",
-    "editionId": 59
+    "region": "Ranchi",
+    "editionCode": "HTC_RANC"
   },
   {
     "displayName": "East UP",
     "slug": "east-up",
-    "cityCode": "HT_EAST",
-    "editionId": 63
+    "region": "East UP",
+    "editionCode": "HT_EAUP"
   },
   {
     "displayName": "West UP",
     "slug": "west-up",
-    "cityCode": "HT_WEST",
-    "editionId": 64
+    "region": "West UP",
+    "editionCode": "HT_WEUP"
   },
   {
-    "displayName": "Uttarakhand",
-    "slug": "uttarakhand",
-    "cityCode": "HT_UTTA",
-    "editionId": 65
+    "displayName": "Uttrakhand",
+    "slug": "uttrakhand",
+    "region": "Uttarakhand",
+    "editionCode": "HT_UTTA"
+  },
+  {
+    "displayName": "Brunch Gurugram",
+    "slug": "brunch-gurugram",
+    "region": "Gurgaon",
+    "editionCode": "HTB_GURG"
+  },
+  {
+    "displayName": "Brunch Noida",
+    "slug": "brunch-noida",
+    "region": "Noida",
+    "editionCode": "HTB_DELE"
+  },
+  {
+    "displayName": "Brunch Thane",
+    "slug": "brunch-thane",
+    "region": "Thane",
+    "editionCode": "HTB_THAN"
+  },
+  {
+    "displayName": "Brunch Pune",
+    "slug": "brunch-pune",
+    "region": "Pune",
+    "editionCode": "HTB_PUNE"
+  },
+  {
+    "displayName": "Noida City",
+    "slug": "noida-city",
+    "region": "Noida",
+    "editionCode": "HTC_DELE"
+  },
+  {
+    "displayName": "Brunch Rajasthan",
+    "slug": "brunch-rajasthan",
+    "region": "Rajasthan",
+    "editionCode": "HTB_RAJA"
+  },
+  {
+    "displayName": "School Chandigarh",
+    "slug": "school-chandigarh",
+    "region": "School Chandigarh",
+    "editionCode": "HTN_CHAN"
+  },
+  {
+    "displayName": "Showstoppers",
+    "slug": "showstopper",
+    "region": "Delhi",
+    "editionCode": "HT_HTCS"
+  },
+  {
+    "displayName": "Brunch Patna",
+    "slug": "brunch-patna",
+    "region": "Patna",
+    "editionCode": "HTB_PATM"
+  },
+  {
+    "displayName": "Brunch Ranchi",
+    "slug": "brunch-ranchi",
+    "region": "Ranchi",
+    "editionCode": "HTB_RANC"
+  },
+  {
+    "displayName": "Brunch Lucknow",
+    "slug": "brunch-lucknow",
+    "region": "Lucknow",
+    "editionCode": "HTB_LUCK"
+  },
+  {
+    "displayName": "Brunch East UP",
+    "slug": "brunch-east-up",
+    "region": "East UP",
+    "editionCode": "HTB_EAUP"
+  },
+  {
+    "displayName": "Brunch Navi Mumbai",
+    "slug": "brunch-navi-mumbai",
+    "region": "Navi Mumbai",
+    "editionCode": "HTB_MUMN"
+  },
+  {
+    "displayName": "Thane City",
+    "slug": "thane-city",
+    "region": "Thane",
+    "editionCode": "HTC_THAN"
+  },
+  {
+    "displayName": "Mumbai City",
+    "slug": "mumbai-city-htc-mumb",
+    "region": "Navi Mumbai",
+    "editionCode": "HTC_MUMB"
+  },
+  {
+    "displayName": "Brunch West UP",
+    "slug": "brunch-west-up",
+    "region": "West UP",
+    "editionCode": "HTB_WEUP"
+  },
+  {
+    "displayName": "Brunch Haryana",
+    "slug": "brunch-haryana",
+    "region": "Haryana",
+    "editionCode": "HTB_HARY"
+  },
+  {
+    "displayName": "Brunch Uttrakhand",
+    "slug": "brunch-uttrakhand",
+    "region": "Uttarakhand",
+    "editionCode": "HTB_UTTA"
   },
   {
     "displayName": "Bengaluru",
     "slug": "bengaluru",
-    "cityCode": "HT_BENG",
-    "editionId": 102
+    "region": "Bengaluru",
+    "editionCode": "HT_BLRU"
+  },
+  {
+    "displayName": "Brunch Bengaluru",
+    "slug": "brunch-bengaluru",
+    "region": "Bengaluru",
+    "editionCode": "HTB_BLRU"
+  },
+  {
+    "displayName": "School Lucknow",
+    "slug": "school-lucknow",
+    "region": "School Lucknow",
+    "editionCode": "HTN_LUCK"
   },
   {
     "displayName": "Varanasi",
     "slug": "varanasi",
-    "cityCode": "HT_VARA",
-    "editionId": 133
+    "region": "Varanasi",
+    "editionCode": "HT_EAUPSC"
   }
 ];
 

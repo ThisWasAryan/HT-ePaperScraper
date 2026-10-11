@@ -78,6 +78,31 @@
   color: var(--text-secondary);
 }
 
+.label-with-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.edition-status-badge {
+  font-size: 0.75rem;
+  color: var(--accent-color);
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.spin-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 .input-field {
   padding: 0.75rem 1rem;
   border-radius: var(--border-radius-md);
