@@ -1,21 +1,23 @@
 # HT-ePaperScraper
 
-A beautiful, premium, open-source static web application for browsing, reading, and downloading Hindustan Times ePaper editions.
+> **Live Deployment:** [https://ht-epaperscraper.vercel.app/](https://ht-epaperscraper.vercel.app/)
 
-Built with React, TypeScript, and Vite, this project completely bypasses the ads, sign-in walls, and tracking metrics present on the official website by directly hooking into their unauthenticated backend JSON APIs.
+A beautiful, premium, open-source web application for browsing, reading, and downloading Hindustan Times ePaper editions.
+
+Built with React, TypeScript, and Vite, this project bypasses ads, paywalls, and tracking metrics by routing requests through a lightweight edge proxy server directly to Hindustan Times' unauthenticated internal Next.js backend JSON APIs.
 
 [A Demonstration/Tutorial Video](https://youtu.be/PvuIr3bYZrU) *last updated on 01/06/2026*
 
 ## Features
 
 - **Professional Document Viewer:** An immersive, distraction-free reading experience powered by a custom pan-and-zoom engine. Single-click to zoom exactly at your cursor, double-click for larger steps, and smoothly pan across high-resolution pages.
-- **True Original Quality:** View the exact high-resolution layouts straight from the publisher's digital press.
-- **Historical Access:** Browse past publications and access older editions securely from the archive by selecting supported cities and publication dates.
+- **True Original Quality:** View the exact high-resolution layouts straight from the publisher's digital press in native WebP format.
+- **Historical Access:** Browse past publications and access older editions securely from the archive across 72 regional editions and publication dates.
 - **Instant Background Loading:** Aggressive background pre-fetching ensures pages flip instantly as you read.
 - **Proactive Availability Verification:** Automatically checks and filters out empty or unpublished regional editions on selected dates.
-- **True File Downloading:** Safely download high-resolution images of any page directly to your local device.
+- **True File Downloading:** Safely download high-resolution images of any page directly to your local device with clean, numbered filenames.
 - **Premium Editorial Design:** A highly polished, responsive interface built with pristine serif typography and a carefully restrained color palette (featuring both Light and Dark modes).
-- **Static & Fast:** A pure static frontend application. No backend required—designed perfectly for static hosting like GitHub Pages or Vercel.
+- **Server/Proxy Architecture:** Utilizes edge proxy rewrites on Vercel and a local development proxy server with IPv4 fallback to guarantee 100% reliable, zero-CORS communication with the upstream API.
 
 ---
 <img width="1920" height="1080" alt="DemoHT1" src="https://github.com/user-attachments/assets/e28f0628-d367-4881-bf81-6fdcd6f6a748" />
@@ -50,12 +52,10 @@ Instead of scraping HTML with a slow backend script, we looked at the Chrome Net
 
 Sending a simple `GET` request to this URL returned a beautiful JSON array of every single page in the newspaper. By combining this API array with the `_tn.jpg` resolution hack, the backend data pipeline was completely solved.
 
-### Phase 2: The Architecture (100% Client-Side)
-Because the API was unauthenticated and the initial CORS investigation showed we wouldn't be blocked, we decided to build the entire scraper as a **Pure Static Web App**.
+### Phase 2: The Original Client-Side Architecture & Its Evolution
+Initially, under Hindustan Times' legacy ASP.NET MVC backend, the API had permissive policies that allowed pure client-side `fetch()` requests directly from the user's browser without requiring any intermediary backend server.
 
-* **Stack:** React, TypeScript, and Vite.
-* **Backend:** None! The user's own browser makes the `fetch()` requests directly to the HT servers.
-* **Hosting:** Because there is no backend database or Node.js server, the app compiles to pure HTML/CSS/JS and is hosted entirely for free on GitHub Pages.
+However, as the publisher migrated to a modern Next.js infrastructure (see Phase 7), cross-origin restrictions were introduced. Today, a lightweight server or edge proxy is required to broker communication between the frontend and the upstream API.
 
 ### Phase 3: The UI Pivot (Dashboard to Editorial)
 Once the data was flowing, the initial UI looked like a generic "SaaS Dashboard." It had big control panels, empty white space, and glowing buttons.
@@ -82,22 +82,33 @@ The desktop version was perfect, but the mobile version felt cramped. We execute
 ### Phase 6: True File Downloading
 We couldn't just use `<a href="image.jpg" download>` because modern browsers will often just open the image in a new tab instead of saving it. To force a download, we wrote a function that fetches the image as a raw `Blob`, creates a temporary object URL in browser memory, generates an invisible link, clicks it, and then destroys the link.
 
-### Phase 7: The Next.js Overhaul & Resilience Upgrade
-When Hindustan Times decommissioned their legacy ASP.NET MVC backend in favor of a modern **Next.js (Turbopack)** infrastructure, the old `/Home/GetAllpages` endpoint went dark (404 Not Found) and images migrated from `.jpg` to `.webp`.
+### Phase 7: The Next.js Overhaul & Why a Server is Needed Now
+When Hindustan Times decommissioned their legacy backend in favor of a modern **Next.js (Turbopack)** infrastructure, two critical things changed:
+- The old endpoints were retired in favor of `/api/get-all-pages?editioncode={code}&editiondate={date}`.
+- **CORS Enforcement:** The new Next.js internal API does not set `Access-Control-Allow-Origin: *` headers for third-party browser origins. Direct browser requests from static websites (e.g., GitHub Pages) fail with CORS errors.
 
-We adapted the scraper to the new architecture:
-1. **Next.js Internal Route Hooking:** Reverse-engineered their new API endpoint:
-   `https://epaper.hindustantimes.com/api/get-all-pages?editioncode={editionCode}&editiondate={yyyy-MM-dd}`
-2. **First-Class High-Res WebP:** Mapped native `HrImageUrl` and `HighResolution` WebP assets directly from the payload, bypassing the need for lossy image conversions.
-3. **Expanded Edition Directory:** Updated the catalog to **72 editions** with authentic region and edition codes.
-4. **Proxy Architecture:** Added dual-routing support with Vite dev proxy (`family: 4`) and `vercel.json` rewrites to guarantee zero-CORS access across both local development and hosted deployments.
+To solve this, a proxy server is now used:
+1. **Local Development Proxy:** Vite's development server (`npm run dev`) includes a built-in reverse proxy in `vite.config.ts` using Node's HTTPS agent configured with IPv4 (`family: 4`) to bypass both local network IPv6 routing hiccups and CORS restrictions.
+2. **Production Edge Proxy on Vercel:** In production, Vercel's edge network proxies `/api/*` requests via `vercel.json` rewrites directly to `epaper.hindustantimes.com` server-side, eliminating browser CORS issues without needing to maintain dedicated server infrastructure.
+3. **First-Class High-Res WebP:** Mapped native `HrImageUrl` and `HighResolution` WebP assets directly from the payload, bypassing the need for lossy image conversions.
+4. **Expanded Edition Directory:** Updated the catalog to **72 editions** with authentic region and edition codes.
 5. **Proactive Edition Availability:** Added parallel scanning and caching so only editions containing published pages on the selected date appear in the dropdown.
+
+---
+
+## Live Deployment
+
+The application is deployed and live on Vercel:
+
+👉 **[https://ht-epaperscraper.vercel.app/](https://ht-epaperscraper.vercel.app/)**
 
 ---
 
 ## Setup & Local Development
 
-This project requires Node.js and NPM.
+This project requires **Node.js** (v18+) and **NPM**.
+
+> **Note:** A running server is required. Because the publisher's API blocks cross-origin browser requests, you cannot simply open the built `dist/index.html` static file directly. Always run `npm run dev` locally to utilize Vite's internal API proxy.
 
 1. Clone the repository:
    ```bash
@@ -115,9 +126,11 @@ This project requires Node.js and NPM.
    npm run dev
    ```
 
+   The app will run locally at `http://localhost:5173/`.
+
 ## Deployment to Vercel (Recommended)
 
-Deploying to **Vercel** is the recommended hosting method because it provides instant edge proxy rewrites configured in `vercel.json`. This completely bypasses browser CORS restrictions on production domains:
+Deploying to **Vercel** is the official hosting method for this project. Vercel automatically runs serverless edge rewrites configured in `vercel.json`, fulfilling the server requirement and eliminating browser CORS restrictions:
 
 1. Push your changes to your GitHub repository.
 2. Sign in to [Vercel](https://vercel.com) and click **"Add New Project"**.
@@ -127,11 +140,11 @@ Deploying to **Vercel** is the recommended hosting method because it provides in
    - **Output Directory:** `dist`
 5. Click **"Deploy"**.
 
-The included `vercel.json` automatically routes `/api/get-all-pages` to `https://epaper.hindustantimes.com/api/get-all-pages` via Vercel Edge Rewrites with clean single-page app fallback routing.
+The included `vercel.json` automatically routes `/api/get-all-pages` to `https://epaper.hindustantimes.com/api/get-all-pages` via Vercel Edge Rewrites with clean single-page app fallback routing (`/(.*) -> /index.html`).
 
 ## Production Build
 
-To build the static optimized files locally:
+To build the optimized static assets locally:
 
 ```bash
 npm run build
