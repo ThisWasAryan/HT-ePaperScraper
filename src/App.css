@@ -247,14 +247,46 @@
   gap: 0.25rem;
 }
 
+.card-header-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .card-page-num {
   font-weight: 700;
   font-size: 1.125rem;
 }
 
+.card-section-badge {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.125rem 0.4rem;
+  border-radius: 9999px;
+  background-color: var(--border-color);
+  color: var(--text-secondary);
+}
+
+.card-section-badge.badge-jacket {
+  background-color: rgba(234, 88, 12, 0.12);
+  color: #ea580c;
+}
+
+.card-section-badge.badge-supp {
+  background-color: rgba(37, 99, 235, 0.12);
+  color: var(--accent-color);
+}
+
 .card-title {
   font-size: 0.875rem;
   color: var(--text-secondary);
+}
+
+.card-print-badge {
+  font-weight: 500;
+  opacity: 0.85;
 }
 
 .card-actions {
@@ -336,6 +368,17 @@
 .reader-page-title {
   font-size: 0.875rem;
   color: var(--text-secondary);
+}
+
+.reader-print-num {
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.reader-section-badge {
+  font-size: 0.8125rem;
+  color: var(--accent-color);
+  font-weight: 500;
 }
 
 .reader-controls {

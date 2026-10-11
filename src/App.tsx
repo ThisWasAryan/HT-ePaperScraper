@@ -17,7 +17,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [pages, setPages] = useState<PageInfo[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [readerPage, setReaderPage] = useState<number | null>(null);
+  const [readerIndex, setReaderIndex] = useState<number | null>(null);
 
   // Scroll direction detection for mobile sticky header
   const [isHeaderHidden, setIsHeaderHidden] = useState(false);
@@ -114,14 +114,14 @@ function App() {
         )}
 
         {!isLoading && !error && pages.length > 0 && (
-          <GalleryView pages={pages} onOpenReader={setReaderPage} />
+          <GalleryView pages={pages} onOpenReader={setReaderIndex} />
         )}
 
-        {readerPage !== null && (
+        {readerIndex !== null && (
           <ReaderView 
             pages={pages} 
-            initialPageNumber={readerPage} 
-            onClose={() => setReaderPage(null)} 
+            initialPageIndex={readerIndex} 
+            onClose={() => setReaderIndex(null)} 
           />
         )}
       </main>

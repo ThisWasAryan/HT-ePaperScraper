@@ -5,14 +5,13 @@ import type { PageInfo } from '../services/epaperService';
 
 interface ReaderViewProps {
   pages: PageInfo[];
-  initialPageNumber: number;
+  initialPageIndex: number;
   onClose: () => void;
 }
 
-export const ReaderView: React.FC<ReaderViewProps> = ({ pages, initialPageNumber, onClose }) => {
+export const ReaderView: React.FC<ReaderViewProps> = ({ pages, initialPageIndex, onClose }) => {
   const [currentIndex, setCurrentIndex] = useState(() => {
-    const index = pages.findIndex((p) => p.pageNumber === initialPageNumber);
-    return index >= 0 ? index : 0;
+    return Math.max(0, Math.min(initialPageIndex, pages.length - 1));
   });
   
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -58,7 +57,8 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ pages, initialPageNumber
       const a = document.createElement('a');
       a.href = blobUrl;
       const extension = currentPage.fullResUrl.includes('.webp') ? 'webp' : 'jpg';
-      a.download = `HT_Archive_Page_${currentPage.pageNumber}.${extension}`;
+      const safeTitle = currentPage.title.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+      a.download = `HT_Archive_Page_${String(currentIndex + 1).padStart(2, '0')}_${safeTitle}.${extension}`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -93,8 +93,16 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ pages, initialPageNumber
             <span>Close</span>
           </button>
           <div className="reader-page-info">
-            <span className="reader-page-number serif">Page {currentPage.pageNumber} of {pages[pages.length - 1].pageNumber}</span>
-            <span className="reader-page-title">{currentPage.title}</span>
+            <span className="reader-page-number serif">Page {currentIndex + 1} of {pages.length}</span>
+            <span className="reader-page-title">
+              {currentPage.title}
+              {currentPage.printPageNumber && currentPage.printPageNumber !== `Page ${currentIndex + 1}` && (
+                <span className="reader-print-num"> ({currentPage.printPageNumber})</span>
+              )}
+              {currentPage.section && (
+                <span className="reader-section-badge"> • {currentPage.section}</span>
+              )}
+            </span>
           </div>
         </div>
 

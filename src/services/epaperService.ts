@@ -3,6 +3,8 @@ import { getCityBySlug, type CityConfig } from '../config/cities';
 
 export interface PageInfo {
   pageNumber: number;
+  printPageNumber?: string;
+  section?: string;
   pageId: string;
   title: string;
   thumbnailUrl: string;
@@ -81,19 +83,43 @@ export const fetchEdition = async (citySlug: string, date: Date): Promise<Editio
         // Thumbnail image: prioritize high-definition portrait webp instead of 89x140 tiny icon
         const thumbnailUrl = page.MrImageUrl || page.PortraitImageUrl || page.FileName || page.TnImageUrl || fullResUrl;
 
-        const pageNum = parseInt(page.PageNo || page.Sequence || String(index + 1), 10) || (index + 1);
+        // Clean up title (strip technical artifacts like _V2, underscores)
+        let title = page.NewsProPageTitle || page.PageNumber || `Page ${index + 1}`;
+        title = title.replace(/_V2$/i, '').replace(/_/g, ' ').trim();
+        if (title.toLowerCase() === 'front') {
+          title = 'Front Page';
+        }
+
+        // Identify section (Jacket Cover, Supplement, Main Paper)
+        let section = 'Main Paper';
+        const orgId = page.PageOrgId || '';
+        const seqNum = parseInt(page.Sequence, 10);
+        const isJacket = (!isNaN(seqNum) && seqNum < 0) ||
+                         title.toLowerCase().includes('jacket') ||
+                         title.toLowerCase().includes('flap');
+        if (isJacket) {
+          section = 'Jacket Cover';
+        } else if (orgId.includes('_B3_') || page.Supplement) {
+          section = 'Supplement';
+        }
+
+        // Printed newspaper page number (if standard 1..80 range)
+        const rawPageNo = parseInt(page.PageNo, 10);
+        const printPageNumber = !isNaN(rawPageNo) && rawPageNo > 0 && rawPageNo < 80 ? `Page ${rawPageNo}` : undefined;
 
         return {
-          pageNumber: pageNum,
-          pageId: page.PageId?.toString() || page.PageOrgId || `page-${pageNum}`,
-          title: page.NewsProPageTitle || page.PageNumber || `Page ${pageNum}`,
+          pageNumber: index + 1,
+          printPageNumber,
+          section,
+          pageId: page.PageId?.toString() || page.PageOrgId || `page-${index + 1}`,
+          title,
           thumbnailUrl,
           fullResUrl
         };
       });
 
-      // Sort by page number to ensure correct reading order
-      pages.sort((a, b) => a.pageNumber - b.pageNumber);
+      // The API returns pages in exact publication sequence (Jacket -> Main -> Supplement)
+      // Do not sort by PageNo as that scrambles supplements and jackets!
 
       const successResult = { pages };
       editionCache.set(cacheKey, successResult);

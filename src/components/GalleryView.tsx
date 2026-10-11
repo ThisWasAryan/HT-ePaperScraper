@@ -4,7 +4,7 @@ import { PageCard } from './PageCard';
 
 interface GalleryViewProps {
   pages: PageInfo[];
-  onOpenReader: (pageNumber: number) => void;
+  onOpenReader: (index: number) => void;
 }
 
 export const GalleryView: React.FC<GalleryViewProps> = ({ pages, onOpenReader }) => {
@@ -19,10 +19,11 @@ export const GalleryView: React.FC<GalleryViewProps> = ({ pages, onOpenReader })
         </span>
       </div>
       <div className="gallery-grid">
-        {pages.map((page) => (
+        {pages.map((page, index) => (
           <PageCard 
             key={page.pageId} 
             page={page} 
+            index={index}
             onOpenReader={onOpenReader} 
           />
         ))}

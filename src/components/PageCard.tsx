@@ -4,10 +4,11 @@ import type { PageInfo } from '../services/epaperService';
 
 interface PageCardProps {
   page: PageInfo;
-  onOpenReader: (pageNumber: number) => void;
+  index: number;
+  onOpenReader: (index: number) => void;
 }
 
-export const PageCard: React.FC<PageCardProps> = ({ page, onOpenReader }) => {
+export const PageCard: React.FC<PageCardProps> = ({ page, index, onOpenReader }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
 
@@ -24,7 +25,8 @@ export const PageCard: React.FC<PageCardProps> = ({ page, onOpenReader }) => {
       const a = document.createElement('a');
       a.href = blobUrl;
       const extension = page.fullResUrl.includes('.webp') ? 'webp' : 'jpg';
-      a.download = `HT_Archive_Page_${page.pageNumber}.${extension}`;
+      const safeTitle = page.title.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+      a.download = `HT_Archive_Page_${String(page.pageNumber).padStart(2, '0')}_${safeTitle}.${extension}`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -41,7 +43,7 @@ export const PageCard: React.FC<PageCardProps> = ({ page, onOpenReader }) => {
 
   return (
     <div className="page-card">
-      <div className="card-image-container" onClick={() => onOpenReader(page.pageNumber)}>
+      <div className="card-image-container" onClick={() => onOpenReader(index)}>
         {!imageLoaded && <div className="skeleton" style={{ width: '100%', height: '100%', position: 'absolute' }} />}
         <img
           src={page.thumbnailUrl || page.fullResUrl}
@@ -55,13 +57,25 @@ export const PageCard: React.FC<PageCardProps> = ({ page, onOpenReader }) => {
       </div>
       <div className="card-footer">
         <div className="card-info">
-          <span className="card-page-num serif">Page {page.pageNumber}</span>
-          <span className="card-title">{page.title}</span>
+          <div className="card-header-row">
+            <span className="card-page-num serif">Page {page.pageNumber}</span>
+            {page.section && (
+              <span className={`card-section-badge ${page.section === 'Jacket Cover' ? 'badge-jacket' : page.section === 'Supplement' ? 'badge-supp' : ''}`}>
+                {page.section}
+              </span>
+            )}
+          </div>
+          <span className="card-title">
+            {page.title}
+            {page.printPageNumber && page.printPageNumber !== `Page ${page.pageNumber}` && (
+              <span className="card-print-badge"> ({page.printPageNumber})</span>
+            )}
+          </span>
         </div>
         <div className="card-actions">
           <button 
             className="btn-icon" 
-            onClick={() => onOpenReader(page.pageNumber)}
+            onClick={() => onOpenReader(index)}
             title="Open in Reader"
           >
             <Maximize2 size={20} />
