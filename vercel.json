@@ -3,6 +3,10 @@
     {
       "source": "/api/:path*",
       "destination": "https://epaper.hindustantimes.com/api/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }

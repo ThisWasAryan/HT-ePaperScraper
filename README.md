@@ -115,14 +115,28 @@ This project requires Node.js and NPM.
    npm run dev
    ```
 
+## Deployment to Vercel (Recommended)
+
+Deploying to **Vercel** is the recommended hosting method because it provides instant edge proxy rewrites configured in `vercel.json`. This completely bypasses browser CORS restrictions on production domains:
+
+1. Push your changes to your GitHub repository.
+2. Sign in to [Vercel](https://vercel.com) and click **"Add New Project"**.
+3. Import your `HT-ePaperScraper` repository.
+4. Vercel automatically detects the Vite framework with:
+   - **Build Command:** `npm run build`
+   - **Output Directory:** `dist`
+5. Click **"Deploy"**.
+
+The included `vercel.json` automatically routes `/api/get-all-pages` to `https://epaper.hindustantimes.com/api/get-all-pages` via Vercel Edge Rewrites with clean single-page app fallback routing.
+
 ## Production Build
 
-To build the static optimized files for production:
+To build the static optimized files locally:
 
 ```bash
 npm run build
 ```
-The compiled files will be located in the `dist` directory, ready to be deployed to any static host like Vercel, Netlify, or GitHub Pages.
+The compiled files will be located in the `dist` directory.
 
 ## Disclaimer
 

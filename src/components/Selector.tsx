@@ -67,20 +67,22 @@ export const Selector: React.FC<SelectorProps> = ({
     checkAvailableEditionsInRegion(allEditionsInRegion, selectedDate)
       .then((validEditions) => {
         if (isCancelled) return;
-        setAvailableEditions(validEditions);
-        setIsCheckingEditions(false);
-
-        // Auto-select first available edition if current selection is invalid or unavailable
         if (validEditions.length > 0) {
+          setAvailableEditions(validEditions);
+          // Auto-select first available edition if current selection is invalid or unavailable
           if (!validEditions.some(e => e.slug === selectedCity)) {
             onCityChange(validEditions[0].slug);
           }
+        } else {
+          // If no specific editions could be verified (e.g. network/unverified date), keep region editions as fallback
+          setAvailableEditions(allEditionsInRegion);
         }
+        setIsCheckingEditions(false);
       })
       .catch((err) => {
         if (isCancelled) return;
         console.error('Error verifying editions:', err);
-        // Fallback: show region editions if verification network call fails
+        // Fallback: keep region editions if verification network call fails
         setAvailableEditions(allEditionsInRegion);
         setIsCheckingEditions(false);
       });
@@ -93,6 +95,7 @@ export const Selector: React.FC<SelectorProps> = ({
   const handleRegionChange = (newRegion: string) => {
     const list = groupedCities.get(newRegion);
     if (list && list.length > 0) {
+      setAvailableEditions(list);
       onCityChange(list[0].slug); // Set temporary city, effect will verify availability
     }
   };
@@ -105,7 +108,7 @@ export const Selector: React.FC<SelectorProps> = ({
   };
 
   const allRegionEditions = groupedCities.get(currentRegion) || [];
-  const displayList = isCheckingEditions ? allRegionEditions : availableEditions;
+  const displayList = availableEditions.length > 0 ? availableEditions : allRegionEditions;
   const selectedCityName = displayList.find(c => c.slug === selectedCity)?.displayName || 'Edition';
 
   if (!isExpanded) {
@@ -122,7 +125,7 @@ export const Selector: React.FC<SelectorProps> = ({
     );
   }
 
-  const isSearchDisabled = isLoading || isCheckingEditions || availableEditions.length === 0;
+  const isSearchDisabled = isLoading;
 
   return (
     <div className="selector-bar">
@@ -157,19 +160,13 @@ export const Selector: React.FC<SelectorProps> = ({
           className="input-field"
           value={selectedCity}
           onChange={(e) => onCityChange(e.target.value)}
-          disabled={isLoading || isCheckingEditions}
+          disabled={isLoading}
         >
-          {isCheckingEditions ? (
-            <option value="">Scanning editions with pages...</option>
-          ) : availableEditions.length > 0 ? (
-            availableEditions.map((city) => (
-              <option key={city.slug} value={city.slug}>
-                {city.displayName}
-              </option>
-            ))
-          ) : (
-            <option value="" disabled>No editions published for this date</option>
-          )}
+          {displayList.map((city) => (
+            <option key={city.slug} value={city.slug}>
+              {city.displayName}
+            </option>
+          ))}
         </select>
       </div>
 
@@ -197,13 +194,7 @@ export const Selector: React.FC<SelectorProps> = ({
       >
         <Search size={20} />
         <span>
-          {isLoading 
-            ? 'Loading...' 
-            : isCheckingEditions 
-              ? 'Checking Editions...' 
-              : availableEditions.length === 0 
-                ? 'No Edition Available' 
-                : 'Load Edition'}
+          {isLoading ? 'Loading...' : 'Load Edition'}
         </span>
       </button>
     </div>

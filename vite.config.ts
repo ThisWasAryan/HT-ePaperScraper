@@ -5,7 +5,7 @@ import https from 'node:https'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/HT-ePaperScraper/',
+  base: process.env.GITHUB_ACTIONS && !process.env.VERCEL ? '/HT-ePaperScraper/' : '/',
   server: {
     proxy: {
       '/api': {

@@ -78,8 +78,8 @@ export const fetchEdition = async (citySlug: string, date: Date): Promise<Editio
             .replace('_tn.jpg', '.jpg');
         }
 
-        // Thumbnail image
-        const thumbnailUrl = page.TnImageUrl || page.MrImageUrl || fullResUrl;
+        // Thumbnail image: prioritize high-definition portrait webp instead of 89x140 tiny icon
+        const thumbnailUrl = page.MrImageUrl || page.PortraitImageUrl || page.FileName || page.TnImageUrl || fullResUrl;
 
         const pageNum = parseInt(page.PageNo || page.Sequence || String(index + 1), 10) || (index + 1);
 
